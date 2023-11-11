@@ -6,17 +6,17 @@ public class CreateCountryDTO
 {
     [Required]
     [StringLength(maximumLength: 100, ErrorMessage = "Country Name Is Too Long")]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     [Required]
     [StringLength(maximumLength: 3, ErrorMessage = "Short Country Name Is Too Long")]
-    public string ShortName { get; set; }
+    public string? ShortName { get; set; }
 }
 
 public class CountryDTO : CreateCountryDTO
 {
     public int Id { get; set; }
 
-    public IList<HotelDTO> Hotels { get; set; }
+    public IList<HotelDTO>? Hotels { get; set; } = null;
 }
 

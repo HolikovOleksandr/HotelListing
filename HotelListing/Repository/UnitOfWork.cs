@@ -11,10 +11,10 @@ public class UnitOfWork : IUnitOfWork
         _context = context;
     }
 
-    private IGenericRepository<Country> _countries;
+    private IGenericRepository<Country>? _countries;
     public IGenericRepository<Country> Countries => _countries ??= new GenericRepository<Country>(_context);
 
-    private IGenericRepository<Hotel> _hotels;
+    private IGenericRepository<Hotel>? _hotels;
     public IGenericRepository<Hotel> Hotels => _hotels ??= new GenericRepository<Hotel>(_context);
 
     public void Dispose()

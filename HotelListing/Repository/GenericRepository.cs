@@ -18,7 +18,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task Delete(int id)
     {
         var entity = await _db.FindAsync(id);
-        _db.Remove(entity);
+        _db.Remove(entity ?? throw new NullReferenceException());
     }
 
     public void DeleteRange(IEnumerable<T> entities)
@@ -26,7 +26,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         _db.RemoveRange(entities);
     }
 
-    public async Task<T> Get(Expression<Func<T, bool>> expression, List<string> includes = null)
+    public async Task<T> Get(Expression<Func<T, bool>>? expression = null, List<string>? includes = null)
     {
         IQueryable<T> query = _db;
 
@@ -38,10 +38,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             }
         }
 
-        return await query.AsNoTracking().FirstOrDefaultAsync(expression);
+        return await query.AsNoTracking().FirstOrDefaultAsync(expression!) ?? throw new NullReferenceException();
     }
 
-    public async Task<IList<T>> GetAll(Expression<Func<T, bool>> expression = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, List<string> includes = null)
+    public async Task<IList<T>> GetAll(Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, List<string>? includes = null)
     {
         IQueryable<T> query = _db;
 

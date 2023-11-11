@@ -1,7 +1,12 @@
-
+using System.Security.Cryptography.Xml;
+using System.Text.Json.Serialization;
 using HotelListing.Configurations;
 using HotelListing.Data;
+using HotelListing.Models;
+using HotelListing.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Serilog;
 
 internal class Program
@@ -16,7 +21,9 @@ internal class Program
 
         builder.Services.AddAutoMapper(typeof(MapperInitializer));
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().AddNewtonsoftJson(o =>
+            o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        );
 
         builder.Services.AddCors(o =>
         {
@@ -27,6 +34,7 @@ internal class Program
         });
 
         builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
         builder.Services.AddSwaggerGen();
 
         Log.Logger = new LoggerConfiguration()
@@ -36,7 +44,6 @@ internal class Program
             .CreateLogger();
 
         var app = builder.Build();
-
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
