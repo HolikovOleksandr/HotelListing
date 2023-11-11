@@ -10,6 +10,14 @@ internal class Program
         // Add services to the container.
         builder.Services.AddControllers();
 
+        builder.Services.AddCors(o =>
+        {
+            o.AddPolicy("AllowAll", builder =>
+                builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+        });
+
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
@@ -21,6 +29,7 @@ internal class Program
 
         var app = builder.Build();
 
+
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
@@ -29,6 +38,7 @@ internal class Program
         }
 
         app.UseHttpsRedirection();
+        app.UseCors("AllowAll");
         app.UseAuthorization();
         app.MapControllers();
 
