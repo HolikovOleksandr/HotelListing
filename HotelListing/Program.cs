@@ -1,4 +1,5 @@
 
+using HotelListing.Configurations;
 using HotelListing.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -12,6 +13,8 @@ internal class Program
         // Add services to the container.
         var connection = builder.Configuration.GetConnectionString("Sql");
         builder.Services.AddDbContext<DatabaseContext>(opt => opt.UseSqlServer(connection));
+
+        builder.Services.AddAutoMapper(typeof(MapperInitializer));
 
         builder.Services.AddControllers();
 
