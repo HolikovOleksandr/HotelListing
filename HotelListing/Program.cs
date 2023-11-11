@@ -1,4 +1,6 @@
 
+using HotelListing.Data;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 internal class Program
@@ -8,6 +10,9 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
+        var connection = builder.Configuration.GetConnectionString("Sql");
+        builder.Services.AddDbContext<DatabaseContext>(opt => opt.UseSqlServer(connection));
+
         builder.Services.AddControllers();
 
         builder.Services.AddCors(o =>
