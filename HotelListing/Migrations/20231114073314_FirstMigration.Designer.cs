@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelListing.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20231111132028_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231114073314_FirstMigration")]
+    partial class FirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,16 +33,40 @@ namespace HotelListing.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShortName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Countries");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Jamica",
+                            ShortName = "JM"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Bahamas",
+                            ShortName = "BS"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Caiman Island",
+                            ShortName = "CI"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Ukraine",
+                            ShortName = "UA"
+                        });
                 });
 
             modelBuilder.Entity("HotelListing.Models.Hotel", b =>
@@ -53,15 +77,13 @@ namespace HotelListing.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Adress")
-                        .IsRequired()
+                    b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Raiting")
@@ -72,17 +94,56 @@ namespace HotelListing.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("Hotels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "Negril",
+                            CountryId = 1,
+                            Name = "Sandals Resort and SPA",
+                            Raiting = 4.5
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "Gearoge Town",
+                            CountryId = 3,
+                            Name = "Comfort Suites",
+                            Raiting = 4.2999999999999998
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Address = "Nassua",
+                            CountryId = 2,
+                            Name = "Grand Palladium",
+                            Raiting = 4.0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Address = "Georgievska",
+                            CountryId = 4,
+                            Name = "Grand Palladium",
+                            Raiting = 3.0
+                        });
                 });
 
             modelBuilder.Entity("HotelListing.Models.Hotel", b =>
                 {
                     b.HasOne("HotelListing.Models.Country", "Country")
-                        .WithMany()
+                        .WithMany("Hotels")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("HotelListing.Models.Country", b =>
+                {
+                    b.Navigation("Hotels");
                 });
 #pragma warning restore 612, 618
         }

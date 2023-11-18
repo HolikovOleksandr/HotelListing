@@ -1,9 +1,11 @@
 using System.Security.Cryptography.Xml;
 using System.Text.Json.Serialization;
+using HotelListing;
 using HotelListing.Configurations;
 using HotelListing.Data;
 using HotelListing.Models;
 using HotelListing.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -18,6 +20,9 @@ internal class Program
         // Add services to the container.
         var connection = builder.Configuration.GetConnectionString("Sql");
         builder.Services.AddDbContext<DatabaseContext>(opt => opt.UseSqlServer(connection));
+
+        builder.Services.AddAuthentication();
+        builder.Services.ConfigureIdentity();
 
         builder.Services.AddAutoMapper(typeof(MapperInitializer));
 

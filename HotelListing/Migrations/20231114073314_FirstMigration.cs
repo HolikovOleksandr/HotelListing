@@ -2,10 +2,12 @@
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace HotelListing.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class FirstMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,8 +18,8 @@ namespace HotelListing.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ShortName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShortName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -30,8 +32,8 @@ namespace HotelListing.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Adress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Raiting = table.Column<double>(type: "float", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -44,6 +46,28 @@ namespace HotelListing.Migrations
                         principalTable: "Countries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Countries",
+                columns: new[] { "Id", "Name", "ShortName" },
+                values: new object[,]
+                {
+                    { 1, "Jamica", "JM" },
+                    { 2, "Bahamas", "BS" },
+                    { 3, "Caiman Island", "CI" },
+                    { 4, "Ukraine", "UA" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Hotels",
+                columns: new[] { "Id", "Address", "CountryId", "Name", "Raiting" },
+                values: new object[,]
+                {
+                    { 1, "Negril", 1, "Sandals Resort and SPA", 4.5 },
+                    { 2, "Gearoge Town", 3, "Comfort Suites", 4.2999999999999998 },
+                    { 3, "Nassua", 2, "Grand Palladium", 4.0 },
+                    { 4, "Georgievska", 4, "Grand Palladium", 3.0 }
                 });
 
             migrationBuilder.CreateIndex(
